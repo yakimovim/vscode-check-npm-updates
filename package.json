@@ -1,0 +1,48 @@
+{
+    "name": "npm-check-packages",
+    "displayName": "npm-check-packages",
+    "description": "Checks if all required npm packages are up to date",
+    "version": "0.0.1",
+    "publisher": "iakimov",
+    "engines": {
+        "vscode": "^1.16.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "workspaceContains:./package.json"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "npmCheckUpdates.checkUpdates",
+                "title": "Check npm updates"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "npmCheckUpdates.checkUpdates",
+                "key": "shift+ctrl+c",
+                "mac": "shift+cmd+c"
+            }
+        ]
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5",
+        "mocha": "^3.5.0",
+        "eslint": "^4.6.1",
+        "@types/node": "^7.0.0",
+        "@types/semver": "^5.4.0",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "semver": "^5.4.1"
+    }
+}

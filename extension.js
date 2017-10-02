@@ -38,7 +38,7 @@ function checkNpmUpdates() {
             .then(data => {
                 const packages = data.packages;
                 return packageVersions.collectAvailableVersions(packages)
-                    .then(_ => { 
+                    .then(() => { 
                         return {
                             currentFolder: data.currentFolder,
                             packages: packages
@@ -47,18 +47,15 @@ function checkNpmUpdates() {
             })
             .then(data => {
                 const packagesToUpdate = packageVersions.getRequiredUpdates(data.packages);
-                console.log(packagesToUpdate);
                 if(packagesToUpdate.length === 0) {
                     return;
                 } else if(packagesToUpdate.length === 1) {
-                    vscode.window.showInformationMessage(`There is a newer version of the '${packagesToUpdate[0]}' package in the '${data.currentFolder}' folder. Execute 'npm install'.`);
+                    vscode.window.showInformationMessage(`There is a newer version of the '${packagesToUpdate[0]}' package in the '${data.currentFolder}' folder. Execute 'npm update'.`);
                 } else {
-                    vscode.window.showInformationMessage(`There are newer versions of packages in the '${data.currentFolder}' folder. Execute 'npm install'.`);
+                    vscode.window.showInformationMessage(`There are newer versions of packages in the '${data.currentFolder}' folder. Execute 'npm update'.`);
                 }
             })
-            .catch(reason => {
-                console.error(reason);
-            })
+            .catch(() => {})
     });
 }
 
@@ -71,7 +68,7 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    var disposable = vscode.commands.registerCommand('npmCheckUpdates.checkUpdates', function () {
+    var disposable = vscode.commands.registerCommand('checkNpmUpdates.checkUpdates', function () {
         checkNpmUpdates();
     });
 

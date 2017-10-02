@@ -1,14 +1,26 @@
 {
-    "name": "npm-check-packages",
-    "displayName": "npm-check-packages",
+    "name": "check-npm-updates",
+    "displayName": "Check Updates of NPM Packages",
     "description": "Checks if all required npm packages are up to date",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "publisher": "iakimov",
     "engines": {
         "vscode": "^1.16.0"
     },
+    "homepage": "https://github.com/yakimovim/vscode-check-npm-updates",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/yakimovim/vscode-check-npm-updates.git"
+    },
+    "license": "https://raw.githubusercontent.com/yakimovim/vscode-check-npm-updates/master/LICENSE",
     "categories": [
         "Other"
+    ],
+    "keywords": [
+        "npm",
+        "javascript",
+        "node",
+        "update"
     ],
     "activationEvents": [
         "workspaceContains:./package.json"
@@ -17,30 +29,31 @@
     "contributes": {
         "commands": [
             {
-                "command": "npmCheckUpdates.checkUpdates",
+                "command": "checkNpmUpdates.checkUpdates",
                 "title": "Check npm updates"
             }
         ],
         "keybindings": [
             {
-                "command": "npmCheckUpdates.checkUpdates",
+                "command": "checkNpmUpdates.checkUpdates",
                 "key": "shift+ctrl+c",
                 "mac": "shift+cmd+c"
             }
         ]
     },
+    "icon": "images/icon.png",
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.5.2",
-        "vscode": "^1.1.5",
-        "mocha": "^3.5.0",
-        "eslint": "^4.6.1",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.0",
         "@types/semver": "^5.4.0",
-        "@types/mocha": "^2.2.42"
+        "eslint": "^4.6.1",
+        "mocha": "^3.5.0",
+        "typescript": "^2.5.3",
+        "vscode": "^1.1.5"
     },
     "dependencies": {
         "semver": "^5.4.1"

@@ -1,28 +1,56 @@
 const exec = require('child_process').exec;
 const semver = require('semver');
+const logger = require('./logger');
+
+let packageVersionsCache = {};
+
+function clearCacheOfPackageVersions() {
+    packageVersionsCache = {};
+}
+
+exports.clearCacheOfPackageVersions = clearCacheOfPackageVersions;
 
 function getAvailablePackageVersions(packageName) {
     return new Promise((resolve, reject) => {
+        logger.logInfo(`Getting available package versions for ${packageName}...`);
+
+        if(!!packageVersionsCache[packageName]) {
+            resolve(packageVersionsCache[packageName]);
+            return;
+        }
+
         exec(`npm show ${packageName} versions --json`, (error, stdout, stderr) => {
             if(error) {
+                logger.logError(`Unable to get available package versions for ${packageName}`);
                 reject(error);
                 return;
             }
 
             if(stderr) {
+                logger.logError(`Unable to get available package versions for ${packageName}`);
                 reject(stderr);
                 return;
             }
 
-            resolve(stdout);
+            resolve(JSON.parse(stdout));
         })
     });
 }
 
+function getAvailablePackageVersionsWithRepeat(packageName, numberOfRepeats) {
+    return getAvailablePackageVersions(packageName)
+        .catch(err => {
+            if(numberOfRepeats > 0) {
+                logger.logInfo(`Repeating getting available versions for ${packageName}. ${numberOfRepeats} repeats left.`);
+                return getAvailablePackageVersionsWithRepeat(packageName, numberOfRepeats - 1);
+            }
+            throw new Error(err);
+        })
+}
+
 function extractCurrentPackageVersions({ packageFileJson, packageLockFileJson }) {
 
-    function collectRequiredPackages(dependencies, packages)
-    {
+    function collectRequiredPackages(dependencies, packages) {
         if(dependencies) {
             for(var packageName in dependencies) {
                 packages.push({
@@ -56,14 +84,11 @@ exports.extractCurrentPackageVersions = extractCurrentPackageVersions;
 function collectAvailableVersions(packages) {
     return Promise.all(packages.map(packageInfo => {
         const currentPackageInfo = packageInfo;
-        return getAvailablePackageVersions(packageInfo.packageName)
-            .then(result => {
-                return JSON.parse(result);
-            })
+        return getAvailablePackageVersionsWithRepeat(packageInfo.packageName, 5)
             .then(versionsJson => {
                 currentPackageInfo.availableVersions = versionsJson;
             })
-            .catch(_ => {});
+            .catch(err => { logger.logError(err); });
     }));
 }
 

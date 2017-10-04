@@ -4,7 +4,7 @@ Visual Studio Code extensions that checks if all packages in `dependencies` and 
 
 ## Features
 
-The extension is activated every time you open workspace folder containing `package.json` file. Also you can run it at any moment using keyboard shortcut.
+The extension is activated every time you open new workspace. It looks for `package.json` files in all subfolders of the folders of workspaces. But `node_modules` folders are excluded from the search. Also you can run it at any moment using keyboard shortcut.
 
 ## Keyboard Shortcuts
 
@@ -19,6 +19,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 ### 1.0.0
 
 The extension only checks presence `package.json` in the folder of workspace.
+
+### 1.1.0
+
+The extension looks for `package.json` files in all subfolders of the folder of workspace. But `node_modules` folders are excluded from the search.
 
 ## Release Notes
 

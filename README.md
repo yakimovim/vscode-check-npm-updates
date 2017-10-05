@@ -18,6 +18,12 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.1.3
+
+* Configuration setting to set number of simultaneously displayed notifications.
+* Prevent from running several checks at the same time.
+
+
 ### 1.1.2
 
 Improve searching of `package.json` files in many folders to find them faster.

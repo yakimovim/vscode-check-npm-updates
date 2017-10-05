@@ -11,12 +11,14 @@ const logger = require('./logger');
 
 logger.logInfo('Extension module is loaded');
 
+let checkIsExecuting = false;
+
 function checkNpmUpdatesInPackageFile(packageFilePath) {
     const folderPath = path.dirname(packageFilePath);
     const packageLockFilePath = path.join(folderPath, "package-lock.json");
     logger.logInfo(`Checking for available updates in ${packageFilePath}`);
 
-    fileFunctions.readFileAsync(packageFilePath, { encoding: 'utf8' })
+    return fileFunctions.readFileAsync(packageFilePath, { encoding: 'utf8' })
     .then(packageFileContent => {
         return JSON.parse(packageFileContent);
     })
@@ -56,21 +58,31 @@ function checkNpmUpdatesInPackageFile(packageFilePath) {
 }
 
 function checkNpmUpdatesForAllWorkspaces() {
+    if(checkIsExecuting) {
+        vscode.window.showInformationMessage('Check for updates of NPM packages is already executing. Please wait.');
+        return;
+    }
+
+    checkIsExecuting = true;
+
     packageVersions.clearCacheOfPackageVersions();
     notifications.resetNumberOfDisplayedNotifications();
 
-    vscode.workspace.workspaceFolders.map(folder => {
+    Promise.all(vscode.workspace.workspaceFolders.map(folder => {
         const folderPath = folder.uri.fsPath;
         logger.logInfo(`Looking for package files in ${folderPath}`);
 
-        fileFunctions.findPackageFiles(folderPath)
+        return fileFunctions.findPackageFiles(folderPath)
             .then(files => {
-                files.forEach(packageFilePath => {
-                    checkNpmUpdatesInPackageFile(packageFilePath);
-                });
+                return Promise.all(files.map(packageFilePath => {
+                    return checkNpmUpdatesInPackageFile(packageFilePath);
+                }));
             })
             .catch(err => { logger.logError(err); });
-    });
+    }))
+    .then(() => {
+        checkIsExecuting = false;
+    })
 }
 
 // this method is called when your extension is activated

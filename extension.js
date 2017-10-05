@@ -8,6 +8,8 @@ const fileFunctions = require('./fileFunctions');
 const packageVersions = require('./packageVersions');
 const logger = require('./logger');
 
+logger.logInfo('Extension module is loaded');
+
 function checkNpmUpdatesInPackageFile(packageFilePath) {
     const folderPath = path.dirname(packageFilePath);
     const packageLockFilePath = path.join(folderPath, "package-lock.json");

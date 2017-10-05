@@ -17,10 +17,11 @@ function readFileAsync(path, options) {
 
 exports.readFileAsync = readFileAsync;
 
-function findFilesUsingGlob(rootFolder, pattern) {
+function findPackageFilesUsingGlob(rootFolder) {
     return new Promise((resolve, reject) => {
-        glob(pattern, { 
-            cwd: rootFolder
+        glob('**/package.json', { 
+            cwd: rootFolder,
+            ignore: [ '**/node_modules/**/package.json' ]
         }, (err, files) => {
             if(err) {
                 reject(err);
@@ -33,7 +34,7 @@ function findFilesUsingGlob(rootFolder, pattern) {
 }
 
 function findPackageFiles(rootFolder) {
-    return findFilesUsingGlob(rootFolder, "**/package.json")
+    return findPackageFilesUsingGlob(rootFolder)
     .catch(err => { 
         logger.logError(err);
         return []; 

@@ -16,6 +16,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.1.2
+
+Improve searching of `package.json` files in many folders to find them faster.
+
 ### 1.1.1
 
 Request for available package versions is made only once even if the same package is used in different `package.json` files in many folders.

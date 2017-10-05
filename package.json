@@ -39,7 +39,17 @@
                 "key": "shift+ctrl+c",
                 "mac": "shift+cmd+c"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "Check NPM Updates",
+            "properties": {
+                "checkNpmUpdates.maximumNumberOfNotification": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Maximum number of notifications to be displayed simultaneously"
+                }
+            }
+        }
     },
     "icon": "images/icon.png",
     "scripts": {

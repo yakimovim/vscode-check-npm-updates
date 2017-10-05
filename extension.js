@@ -6,6 +6,7 @@ const path = require('path');
 
 const fileFunctions = require('./fileFunctions');
 const packageVersions = require('./packageVersions');
+const notifications = require('./notifications');
 const logger = require('./logger');
 
 logger.logInfo('Extension module is loaded');
@@ -49,19 +50,14 @@ function checkNpmUpdatesInPackageFile(packageFilePath) {
     })
     .then(data => {
         const packagesToUpdate = packageVersions.getRequiredUpdates(data.packages);
-        if(packagesToUpdate.length === 0) {
-            return;
-        } else if(packagesToUpdate.length === 1) {
-            vscode.window.showInformationMessage(`There is a newer version of the '${packagesToUpdate[0]}' package in the '${data.currentFolder}' folder. Execute 'npm update'.`);
-        } else {
-            vscode.window.showInformationMessage(`There are newer versions of packages in the '${data.currentFolder}' folder. Execute 'npm update'.`);
-        }
+        notifications.displayNotification(data.currentFolder, packagesToUpdate);
     })
     .catch(err => { logger.logError(err); })
 }
 
 function checkNpmUpdatesForAllWorkspaces() {
     packageVersions.clearCacheOfPackageVersions();
+    notifications.resetNumberOfDisplayedNotifications();
 
     vscode.workspace.workspaceFolders.map(folder => {
         const folderPath = folder.uri.fsPath;

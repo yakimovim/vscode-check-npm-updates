@@ -6,6 +6,8 @@ Visual Studio Code extensions that checks if all packages in `dependencies` and 
 
 The extension is activated every time you open new workspace. It looks for `package.json` files in all subfolders of the folders of workspaces. But `node_modules` folders are excluded from the search. Also you can run it at any moment using keyboard shortcut.
 
+You can change number of simultaneously displayed notifications by adjusting `checkNpmUpdates.maximumNumberOfNotification` configuration setting. Negative value means that all notifications will be displayed.
+
 ## Keyboard Shortcuts
 
 The extension registers keyboard shortcut `checkNpmUpdates.checkUpdates` to execute checking immediately. Default shortcut is `Shift-Ctrl-C` (`Shift-Cmd-C` for Mac).

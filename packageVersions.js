@@ -102,6 +102,10 @@ function updateRequired(packageInfo) {
         return false;
     }
 
+    if(!packageInfo.installedVersion) {
+        return true;
+    }
+
     const versionRange = `${packageInfo.requestedVersion} >${packageInfo.installedVersion}`;
     
     return packageInfo.availableVersions.some(ver => {

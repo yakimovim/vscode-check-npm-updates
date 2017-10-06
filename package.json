@@ -46,7 +46,7 @@
                 "checkNpmUpdates.maximumNumberOfNotification": {
                     "type": "integer",
                     "default": 10,
-                    "description": "Maximum number of notifications to be displayed simultaneously"
+                    "description": "Maximum number of notifications to be displayed simultaneously. Use negative number to display all notifications."
                 }
             }
         }

@@ -12,6 +12,7 @@ const logger = require('./logger');
 logger.logInfo('Extension module is loaded');
 
 let checkIsExecuting = false;
+let packageVersionsRetriever;
 
 function checkNpmUpdatesInPackageFile(packageFilePath) {
     const folderPath = path.dirname(packageFilePath);
@@ -42,7 +43,7 @@ function checkNpmUpdatesInPackageFile(packageFilePath) {
     })
     .then(data => {
         const packages = data.packages;
-        return packageVersions.collectAvailableVersions(packages)
+        return packageVersionsRetriever.collectAvailableVersions(packages)
             .then(() => { 
                 return {
                     currentFolder: data.currentFolder,
@@ -65,7 +66,7 @@ function checkNpmUpdatesForAllWorkspaces() {
 
     checkIsExecuting = true;
 
-    packageVersions.clearCacheOfPackageVersions();
+    packageVersionsRetriever = new packageVersions.AvailablePackageVersionsRetriever();
     notifications.resetNumberOfDisplayedNotifications();
 
     Promise.all(vscode.workspace.workspaceFolders.map(folder => {

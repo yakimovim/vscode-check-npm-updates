@@ -2,7 +2,7 @@
     "name": "check-npm-updates",
     "displayName": "Check Updates of NPM Packages",
     "description": "Checks if all required npm packages are up to date",
-    "version": "1.1.3",
+    "version": "1.2.0",
     "publisher": "iakimov",
     "engines": {
         "vscode": "^1.16.0"
@@ -47,6 +47,11 @@
                     "type": "integer",
                     "default": 10,
                     "description": "Maximum number of notifications to be displayed simultaneously. Use negative number to display all notifications."
+                },
+                "checkNpmUpdates.numberOfSimultaneousRequests": {
+                    "type": "integer",
+                    "default": 3,
+                    "description": "Number of simultaneous requests to NPM registry. This must be positive number. Be careful. If this number is too big, NPM registry may decline some requests."
                 }
             }
         }

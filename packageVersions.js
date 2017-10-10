@@ -1,4 +1,5 @@
 const exec = require('child_process').exec;
+const vscode = require('vscode');
 const semver = require('semver');
 const logger = require('./logger');
 
@@ -95,19 +96,25 @@ class AvailablePackageVersionsRetriever {
             return;
         }
 
-        const packageInfo = this._queueOfPackages[0];
-        this._getAvailablePackageVersionsWithRepeat(packageInfo.packageName, 5)
-            .then(versions => {
-                packageInfo.deferred.resolve(versions);
-            })
-            .catch(err => {
-                logger.logError(err);
-                packageInfo.deferred.resolve([]);
-            })
-            .then(() => {
-                this._queueOfPackages.splice(0, 1);
-                this._executeGettingAvailableVersions();
-            })
+        const numberOfSimultaneousRequests = Math.max(0, vscode.workspace.getConfiguration("checkNpmUpdates")["numberOfSimultaneousRequests"]);
+        const numberOfRequests = Math.min(this._queueOfPackages.length, numberOfSimultaneousRequests);
+
+        const packageInfos = this._queueOfPackages.slice(0, numberOfRequests);
+        Promise.all(packageInfos.map(packageInfo => {
+            return this._getAvailablePackageVersionsWithRepeat(packageInfo.packageName, 5)
+                .then(versions => {
+                    packageInfo.deferred.resolve(versions);
+                })
+                .catch(err => {
+                    logger.logError(err);
+                    packageInfo.deferred.resolve([]);
+                })
+
+        }))
+        .then(() => {
+            this._queueOfPackages.splice(0, numberOfRequests);
+            this._executeGettingAvailableVersions();
+        })
     }
 
     _getAvailablePackageVersionsWithRepeat(packageName, numberOfRepeats) {
@@ -142,7 +149,7 @@ class AvailablePackageVersionsRetriever {
             })
         });
     }
-    
+
     collectAvailableVersions(packages) {
         return Promise.all(packages.map(packageInfo => {
             const currentPackageInfo = packageInfo;

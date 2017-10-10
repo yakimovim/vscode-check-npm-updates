@@ -8,6 +8,8 @@ The extension is activated every time you open new workspace. It looks for `pack
 
 You can change number of simultaneously displayed notifications by adjusting `checkNpmUpdates.maximumNumberOfNotification` configuration setting. Negative value means that all notifications will be displayed.
 
+If there are many NPM packages in your projects, one should not try to obtain information about available versions of all of them simultaneously. NPM registry will reject some of these requests as there are too many of them. This is why the extension tries to get this information sequentially by batches. You can configure size of a batch (number of simultaneous requests) by adjusting `checkNpmUpdates.numberOfSimultaneousRequests` configuration setting. The bigger the number, the faster you'll get information about all packages. But at the same time, the bigger probability that some requests will be rejected. The extension has mechanism to repeat rejected requests several times, but it will take additional time. Be careful.
+
 ## Keyboard Shortcuts
 
 The extension registers keyboard shortcut `checkNpmUpdates.checkUpdates` to execute checking immediately. Default shortcut is `Shift-Ctrl-C` (`Shift-Cmd-C` for Mac).
@@ -18,11 +20,14 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.2.0
+
+Get information about available versions of NPM packages in configurable batches.
+
 ### 1.1.3
 
 * Configuration setting to set number of simultaneously displayed notifications.
 * Prevent from running several checks at the same time.
-
 
 ### 1.1.2
 

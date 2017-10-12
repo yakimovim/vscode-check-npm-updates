@@ -3,8 +3,8 @@ const dummyLogger = {
     info: () => {},
 }
 
-const logger = dummyLogger;
-// const logger = console;
+// const logger = dummyLogger;
+const logger = console;
 
 function logError(data) {
     logger.error(data);

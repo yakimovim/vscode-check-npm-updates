@@ -1,0 +1,53 @@
+const logger = require("./logger");
+
+class Repeater {
+    constructor(functionReturningPromise, getSecondsBeforeRepetition) {
+        if(!functionReturningPromise) {
+            throw new Error("Function returning promise should be defined.");
+        }
+        if(!getSecondsBeforeRepetition) {
+            throw new Error("Duration provider should be defined.");
+        }
+
+        this._func = functionReturningPromise;
+        this._durationProvider = getSecondsBeforeRepetition;
+        this._timer = null;
+
+        logger.logInfo("Repeater created");
+    }
+
+    execute() {
+        const that = this;
+
+        that.cancelRepetitions();
+
+        return that._func()
+            .then(() => {
+                that.cancelRepetitions();
+
+                var duration = that._durationProvider() * 1000;
+                if(duration <= 0) {
+                    logger.logInfo("Execution will not be repeated.");
+                    return;
+                }
+
+                logger.logInfo(`Execution will be repeated in ${duration} ms.`);
+                that._timer = setTimeout(() => { that.execute() }, duration);
+            });
+    }
+
+    cancelRepetitions() {
+        if (!!this._timer) {
+            clearTimeout(this._timer);
+            this._timer = null;
+        }
+    }
+
+    dispose() {
+        this.cancelRepetitions();
+
+        logger.logInfo("Repeater disposed");
+    }
+}
+
+exports.Repeater = Repeater;

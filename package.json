@@ -52,6 +52,11 @@
                     "type": "integer",
                     "default": 3,
                     "description": "Number of simultaneous requests to NPM registry. This must be positive number. Be careful. If this number is too big, NPM registry may decline some requests."
+                },
+                "checkNpmUpdates.numberOfSecondsBeforeRepeat": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Number of seconds before next check for updates is executed. If zero or negative, then next check will not be automatically executed. Use shortcut to execute check manually."
                 }
             }
         }

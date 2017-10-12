@@ -8,95 +8,104 @@ const fileFunctions = require('./fileFunctions');
 const packageVersions = require('./packageVersions');
 const notifications = require('./notifications');
 const logger = require('./logger');
+const Repeater = require("./repeater").Repeater;
+const SingleExecution = require("./single-execution").SingleExecution;
+const PackageVersionsRetriever = require("./package-versions-retriever").AvailablePackageVersionsRetriever;
 
 logger.logInfo('Extension module is loaded');
 
-let checkIsExecuting = false;
-let packageVersionsRetriever;
-
-function checkNpmUpdatesInPackageFile(packageFilePath) {
+function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath) {
     const folderPath = path.dirname(packageFilePath);
     const packageLockFilePath = path.join(folderPath, "package-lock.json");
     logger.logInfo(`Checking for available updates in ${packageFilePath}`);
 
     return fileFunctions.readFileAsync(packageFilePath, { encoding: 'utf8' })
-    .then(packageFileContent => {
-        return JSON.parse(packageFileContent);
-    })
-    .then(packageFileJson => {
-        return fileFunctions.readFileAsync(packageLockFilePath, { encoding: 'utf8' })
-            .then(packageLockFileContent => {
-                const packageLockFileJson = JSON.parse(packageLockFileContent);
-                return {
-                    currentFolder: folderPath,
-                    packageFileJson: packageFileJson,
-                    packageLockFileJson: packageLockFileJson
-                }
-            })
-    })
-    .then(data => {
-        const packages = packageVersions.extractCurrentPackageVersions(data);
-        return {
-            currentFolder: data.currentFolder,
-            packages: packages
-        }
-    })
-    .then(data => {
-        const packages = data.packages;
-        return packageVersionsRetriever.collectAvailableVersions(packages)
-            .then(() => { 
-                return {
-                    currentFolder: data.currentFolder,
-                    packages: packages
-                }
-            })
-    })
-    .then(data => {
-        const packagesToUpdate = packageVersions.getRequiredUpdates(data.packages);
-        notifications.displayNotification(data.currentFolder, packagesToUpdate);
-    })
-    .catch(err => { logger.logError(err); })
+        .then(packageFileContent => {
+            return JSON.parse(packageFileContent);
+        })
+        .then(packageFileJson => {
+            return fileFunctions.readFileAsync(packageLockFilePath, { encoding: 'utf8' })
+                .then(packageLockFileContent => {
+                    const packageLockFileJson = JSON.parse(packageLockFileContent);
+                    return {
+                        currentFolder: folderPath,
+                        packageFileJson: packageFileJson,
+                        packageLockFileJson: packageLockFileJson
+                    }
+                })
+        })
+        .then(data => {
+            const packages = packageVersions.extractCurrentPackageVersions(data);
+            return {
+                currentFolder: data.currentFolder,
+                packages: packages
+            }
+        })
+        .then(data => {
+            const packages = data.packages;
+            return packageVersionsRetriever.collectAvailableVersions(packages)
+                .then(() => {
+                    return {
+                        currentFolder: data.currentFolder,
+                        packages: packages
+                    }
+                })
+        })
+        .then(data => {
+            const packagesToUpdate = packageVersions.getRequiredUpdates(data.packages);
+            notifications.displayNotification(data.currentFolder, packagesToUpdate);
+        })
+        .catch(err => { logger.logError(err); })
 }
 
 function checkNpmUpdatesForAllWorkspaces() {
-    if(checkIsExecuting) {
-        vscode.window.showInformationMessage('Check for updates of NPM packages is already executing. Please wait.');
-        return;
-    }
-
-    checkIsExecuting = true;
-
-    packageVersionsRetriever = new packageVersions.AvailablePackageVersionsRetriever();
+    const packageVersionsRetriever = new PackageVersionsRetriever();
     notifications.resetNumberOfDisplayedNotifications();
 
-    Promise.all(vscode.workspace.workspaceFolders.map(folder => {
+    return Promise.all(vscode.workspace.workspaceFolders.map(folder => {
         const folderPath = folder.uri.fsPath;
         logger.logInfo(`Looking for package files in ${folderPath}`);
 
         return fileFunctions.findPackageFiles(folderPath)
             .then(files => {
                 return Promise.all(files.map(packageFilePath => {
-                    return checkNpmUpdatesInPackageFile(packageFilePath);
+                    return checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath);
                 }));
             })
             .catch(err => { logger.logError(err); });
-    }))
-    .then(() => {
-        checkIsExecuting = false;
-    })
+    }));
 }
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
 
-    checkNpmUpdatesForAllWorkspaces();
+    const singleExecution = new SingleExecution(
+        () => { 
+            return checkNpmUpdatesForAllWorkspaces(); 
+        },
+        () => { 
+            vscode.window.showInformationMessage('Check for updates of NPM packages is already executing. Please wait.');
+        }
+    );
+
+    const repeater = new Repeater(
+        () => {
+            return singleExecution.execute();
+        },
+        () => {
+            return vscode.workspace.getConfiguration("checkNpmUpdates")["numberOfSecondsBeforeRepeat"];
+        }
+    );
+    context.subscriptions.push(repeater);
+    
+    repeater.execute();
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
     var disposable = vscode.commands.registerCommand('checkNpmUpdates.checkUpdates', function () {
-        checkNpmUpdatesForAllWorkspaces();
+        repeater.execute();
     });
 
     context.subscriptions.push(disposable);

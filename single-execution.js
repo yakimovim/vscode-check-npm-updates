@@ -26,11 +26,17 @@ class SingleExecution {
         this._isExecuting = true;
 
         return this._func()
-            .then(() => {
-                logger.logInfo("Executing of single instance of function is finished.");
+            .then(data => {
+                logger.logInfo("Executing of single instance of function is finished successfully.");
                 this._isExecuting = false;
+                return data;
+            })
+            .catch(err => {
+                logger.logInfo("Executing of single instance of function is finished with error.");
+                this._isExecuting = false;
+                throw err;
             });
     }
 }
 
-exports.SingleExecution = SingleExecution;
+module.exports = SingleExecution;

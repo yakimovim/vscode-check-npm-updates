@@ -8,8 +8,8 @@ const fileFunctions = require('./fileFunctions');
 const packageVersions = require('./packageVersions');
 const notifications = require('./notifications');
 const logger = require('./logger');
-const Repeater = require("./repeater").Repeater;
-const SingleExecution = require("./single-execution").SingleExecution;
+const Repeater = require("./repeater");
+const SingleExecution = require("./single-execution");
 const PackageVersionsRetriever = require("./package-versions-retriever").AvailablePackageVersionsRetriever;
 
 logger.logInfo('Extension module is loaded');

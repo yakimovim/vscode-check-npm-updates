@@ -1,6 +1,6 @@
 # Check Updates of NPM Packages
 
-Visual Studio Code extensions that checks if all packages in `dependencies` and `devDependencies` sections of your `package.json` files are up to date. The extension makes this check in background and shows notifications if updates are required.
+Visual Studio Code extensions that checks if all packages in `dependencies` and `devDependencies` sections of your `package.json` files are up to date. The extension makes this check in background and shows notifications if updates are required. The check will be repeated after predefined interval.
 
 ## Features
 
@@ -9,6 +9,8 @@ The extension is activated every time you open new workspace. It looks for `pack
 You can change number of simultaneously displayed notifications by adjusting `checkNpmUpdates.maximumNumberOfNotification` configuration setting. Negative value means that all notifications will be displayed.
 
 If there are many NPM packages in your projects, one should not try to obtain information about available versions of all of them simultaneously. NPM registry will reject some of these requests as there are too many of them. This is why the extension tries to get this information sequentially by batches. You can configure size of a batch (number of simultaneous requests) by adjusting `checkNpmUpdates.numberOfSimultaneousRequests` configuration setting. The bigger the number, the faster you'll get information about all packages. But at the same time, the bigger probability that some requests will be rejected. The extension has mechanism to repeat rejected requests several times, but it will take additional time. Be careful.
+
+The extension will repeat check of newer available versions of the NPM packages after the predefined period. You can set this period by adjusting `checkNpmUpdates.numberOfSecondsBeforeRepeat` configuration setting. If you set zero or negative number for this setting, then checks will not be repeated automatically. In this case, you'll still be able to execute the check using keyboard shortcut.
 
 ## Keyboard Shortcuts
 

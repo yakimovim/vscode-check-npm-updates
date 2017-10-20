@@ -55,7 +55,7 @@
                 },
                 "checkNpmUpdates.numberOfSecondsBeforeRepeat": {
                     "type": "integer",
-                    "default": 10,
+                    "default": 14400,
                     "description": "Number of seconds before next check for updates is executed. If zero or negative, then next check will not be automatically executed. Use shortcut to execute check manually."
                 }
             }
@@ -69,12 +69,12 @@
     "devDependencies": {
         "@types/glob": "^5.0.33",
         "@types/mocha": "^2.2.42",
-        "@types/node": "^7.0.0",
+        "@types/node": "^7.0.46",
         "@types/semver": "^5.4.0",
-        "eslint": "^4.8.0",
+        "eslint": "^4.9.0",
         "mocha": "^3.5.0",
         "typescript": "^2.5.3",
-        "vscode": "^1.1.5"
+        "vscode": "^1.1.6"
     },
     "dependencies": {
         "glob": "^7.1.2",

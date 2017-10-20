@@ -22,6 +22,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.3.0
+
+Check of available updates will be repeated after preconfigured period of time.
+
 ### 1.2.0
 
 Get information about available versions of NPM packages in configurable batches.

@@ -2,7 +2,7 @@
     "name": "check-npm-updates",
     "displayName": "Check Updates of NPM Packages",
     "description": "Checks if all required npm packages are up to date",
-    "version": "1.3.0",
+    "version": "1.3.1",
     "publisher": "iakimov",
     "engines": {
         "vscode": "^1.16.0"
@@ -67,17 +67,17 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/glob": "^5.0.33",
-        "@types/mocha": "^2.2.42",
-        "@types/node": "^7.0.46",
-        "@types/semver": "^5.4.0",
-        "eslint": "^4.9.0",
-        "mocha": "^3.5.0",
-        "typescript": "^2.5.3",
-        "vscode": "^1.1.6"
+        "@types/glob": "^5.0.35",
+        "@types/mocha": "^5.2.4",
+        "@types/node": "^10.5.2",
+        "@types/semver": "^5.5.0",
+        "eslint": "^5.1.0",
+        "mocha": "^5.2.0",
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.18"
     },
     "dependencies": {
         "glob": "^7.1.2",
-        "semver": "^5.4.1"
+        "semver": "^5.5.0"
     }
 }

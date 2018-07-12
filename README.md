@@ -22,6 +22,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.3.1
+
+Fix of security vulnerabilities in used NPM packages.
+
 ### 1.3.0
 
 Check of available updates will be repeated after preconfigured period of time.

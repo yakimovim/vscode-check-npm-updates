@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const logger = require('./logger');
 
 const defaultConfiguration = {
@@ -6,13 +7,14 @@ const defaultConfiguration = {
     skip: []
 }
 
-function getConfiguration(path) {
+function getConfiguration(folderPath) {
+    const configFilePath = path.join(folderPath, ".checkNpmUpdates.json");
     return new Promise((resolve) => {
-        if(fs.existsSync(path)) {
-            logger.logInfo(`Configuration file is found at '${path}'`)
-            fs.readFile(path, { encoding: 'utf8' }, (err, data) => {
+        if(fs.existsSync(configFilePath)) {
+            logger.logInfo(`Configuration file is found at '${configFilePath}'`)
+            fs.readFile(configFilePath, { encoding: 'utf8' }, (err, data) => {
                 if(err) {
-                    logger.logError(`Error reading configuration file at '${path}': ${err}`)
+                    logger.logError(`Error reading configuration file at '${configFilePath}': ${err}`)
                     resolve(defaultConfiguration)
                 } else {
                     try {
@@ -22,14 +24,14 @@ function getConfiguration(path) {
                         resolve(configuration);
                     }
                     catch (exc) {
-                        logger.logError(`Error converting configuration file at '${path}' to JSON`)
+                        logger.logError(`Error converting configuration file at '${configFilePath}' to JSON`)
                         resolve(defaultConfiguration)
                     }
                 }
             })
         }
         else {
-            logger.logInfo(`Configuration file is not found at '${path}'`)
+            logger.logInfo(`Configuration file is not found at '${configFilePath}'`)
             resolve(defaultConfiguration)
         }
     })

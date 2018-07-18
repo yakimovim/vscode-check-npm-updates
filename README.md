@@ -18,9 +18,9 @@ The extension registers keyboard shortcut `checkNpmUpdates.checkUpdates` to exec
 
 ## Configuration File
 
-You may place a file with name `.checkNpmUpdates` into a folder where `package.json` exists. The content of this file allows you to control how packages in the `package.json` will be checked.
+You may place a file with name `.checkNpmUpdates.json` into a folder where `package.json` exists. The content of this file allows you to control how packages in the `package.json` will be checked.
 
-The `.checkNpmUpdates` must contain JSON object with the following properties:
+The `.checkNpmUpdates.json` must contain JSON object with the following properties:
 
 * disable (optional). Boolean. The default value is `false`. Its value indicates if the check of package versions should be executed for the `package.json` or not.
 * skip (optional). An array of strings. The default value is an empty array. The array contains names of packages that should be excluded from the check. Names are case-insensitive.

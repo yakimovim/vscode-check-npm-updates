@@ -18,7 +18,6 @@ logger.logInfo('Extension module is loaded');
 function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath) {
     const folderPath = path.dirname(packageFilePath);
     const packageLockFilePath = path.join(folderPath, "package-lock.json");
-    const configFilePath = path.join(folderPath, ".checkNpmUpdates");
     logger.logInfo(`Checking for available updates in ${packageFilePath}`);
 
     return fileFunctions.readFileAsync(packageFilePath, { encoding: 'utf8' })
@@ -37,7 +36,7 @@ function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath)
                 })
         })
         .then(data => {
-            return config.getConfiguration(configFilePath)
+            return config.getConfiguration(folderPath)
                 .then(configuration => {
                     data.configuration = configuration;
                     return data;

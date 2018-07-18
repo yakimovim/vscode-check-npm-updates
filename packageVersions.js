@@ -30,7 +30,7 @@ function extractCurrentPackageVersions({ packageFileJson, packageLockFileJson, c
 
     const packages = [];
 
-    if(!configuration.disabled) {
+    if(!configuration.disable) {
         collectRequiredPackages(packageFileJson.dependencies, packages, configuration.skip);
         collectRequiredPackages(packageFileJson.devDependencies, packages, configuration.skip);
 

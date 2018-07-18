@@ -25,7 +25,7 @@ suite("Package Versions Tests", function () {
         }
 
         const configuration = {
-            disabled: false,
+            disable: false,
             skip: []
         }
 
@@ -57,7 +57,7 @@ suite("Package Versions Tests", function () {
         }
 
         const configuration = {
-            disabled: false,
+            disable: false,
             skip: []
         }
 
@@ -105,7 +105,7 @@ suite("Package Versions Tests", function () {
         }
 
         const configuration = {
-            disabled: true,
+            disable: true,
             skip: []
         }
 
@@ -137,7 +137,7 @@ suite("Package Versions Tests", function () {
         }
 
         const configuration = {
-            disabled: false,
+            disable: false,
             skip: [
                 "pack2",
                 "pack4"

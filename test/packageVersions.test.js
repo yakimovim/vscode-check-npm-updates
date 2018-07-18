@@ -24,7 +24,12 @@ suite("Package Versions Tests", function () {
         const packageLockFileJson = {
         }
 
-        var packages = packageVersions.extractCurrentPackageVersions({ packageFileJson, packageLockFileJson });
+        const configuration = {
+            disabled: false,
+            skip: []
+        }
+
+        var packages = packageVersions.extractCurrentPackageVersions({ packageFileJson, packageLockFileJson, configuration });
 
         assert.equal(0, packages.length);
     });
@@ -51,7 +56,12 @@ suite("Package Versions Tests", function () {
             }
         }
 
-        var packages = packageVersions.extractCurrentPackageVersions({ packageFileJson, packageLockFileJson });
+        const configuration = {
+            disabled: false,
+            skip: []
+        }
+
+        var packages = packageVersions.extractCurrentPackageVersions({ packageFileJson, packageLockFileJson, configuration });
 
         assert.equal(4, packages.length);
 
@@ -73,8 +83,83 @@ suite("Package Versions Tests", function () {
     });
 
     // Defines a Mocha unit test
+    test("Extract Current Package Versions. Many packages. Update disabled", function () {
+
+        const packageFileJson = {
+            "dependencies": {
+                "pack1": "^1.0.0",
+                "pack2": "^2.0.0",
+            },
+            "devDependencies": {
+                "pack3": "^3.0.0",
+                "pack4": "^4.0.0"
+            }
+        }
+
+        const packageLockFileJson = {
+            "dependencies": {
+                "pack1": { version: "1.0.1" },
+                "pack2": { version: "2.0.2" },
+                "pack3": { version: "3.0.3" }
+            }
+        }
+
+        const configuration = {
+            disabled: true,
+            skip: []
+        }
+
+        var packages = packageVersions.extractCurrentPackageVersions({ packageFileJson, packageLockFileJson, configuration });
+
+        assert.equal(0, packages.length);
+    });
+
+    // Defines a Mocha unit test
+    test("Extract Current Package Versions. Many packages. Some skipped", function () {
+
+        const packageFileJson = {
+            "dependencies": {
+                "pack1": "^1.0.0",
+                "pack2": "^2.0.0",
+            },
+            "devDependencies": {
+                "pack3": "^3.0.0",
+                "pack4": "^4.0.0"
+            }
+        }
+
+        const packageLockFileJson = {
+            "dependencies": {
+                "pack1": { version: "1.0.1" },
+                "pack2": { version: "2.0.2" },
+                "pack3": { version: "3.0.3" }
+            }
+        }
+
+        const configuration = {
+            disabled: false,
+            skip: [
+                "pack2",
+                "pack4"
+            ]
+        }
+
+        var packages = packageVersions.extractCurrentPackageVersions({ packageFileJson, packageLockFileJson, configuration });
+
+        assert.equal(2, packages.length);
+
+        assert.equal("pack1", packages[0].packageName);
+        assert.equal("^1.0.0", packages[0].requestedVersion);
+        assert.equal("1.0.1", packages[0].installedVersion);
+
+        assert.equal("pack3", packages[1].packageName);
+        assert.equal("^3.0.0", packages[1].requestedVersion);
+        assert.equal("3.0.3", packages[1].installedVersion);
+    });
+
+    // Defines a Mocha unit test
     test("Get Required Updates", function () {
-        
+
                 const packages = [
                     {
                         packageName: "pack1",
@@ -103,9 +188,9 @@ suite("Package Versions Tests", function () {
                         requestedVersion: "^5.0.0"
                     }
                 ]
-        
+
                 var packagesToUpdate = packageVersions.getRequiredUpdates(packages);
-        
+
                 assert.equal(2, packagesToUpdate.length);
                 assert.equal("pack2", packagesToUpdate[0]);
                 assert.equal("pack4", packagesToUpdate[1]);

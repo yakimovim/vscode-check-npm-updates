@@ -7,6 +7,7 @@ const path = require('path');
 const fileFunctions = require('./fileFunctions');
 const packageVersions = require('./packageVersions');
 const notifications = require('./notifications');
+const config = require('./config');
 const logger = require('./logger');
 const Repeater = require("./repeater");
 const SingleExecution = require("./single-execution");
@@ -17,6 +18,7 @@ logger.logInfo('Extension module is loaded');
 function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath) {
     const folderPath = path.dirname(packageFilePath);
     const packageLockFilePath = path.join(folderPath, "package-lock.json");
+    const configFilePath = path.join(folderPath, ".checkNpmUpdates");
     logger.logInfo(`Checking for available updates in ${packageFilePath}`);
 
     return fileFunctions.readFileAsync(packageFilePath, { encoding: 'utf8' })
@@ -32,6 +34,13 @@ function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath)
                         packageFileJson: packageFileJson,
                         packageLockFileJson: packageLockFileJson
                     }
+                })
+        })
+        .then(data => {
+            return config.getConfiguration(configFilePath)
+                .then(configuration => {
+                    data.configuration = configuration;
+                    return data;
                 })
         })
         .then(data => {
@@ -81,10 +90,10 @@ function checkNpmUpdatesForAllWorkspaces() {
 function activate(context) {
 
     const singleExecution = new SingleExecution(
-        () => { 
-            return checkNpmUpdatesForAllWorkspaces(); 
+        () => {
+            return checkNpmUpdatesForAllWorkspaces();
         },
-        () => { 
+        () => {
             vscode.window.showInformationMessage('Check for updates of NPM packages is already executing. Please wait.');
         }
     );
@@ -98,7 +107,7 @@ function activate(context) {
         }
     );
     context.subscriptions.push(repeater);
-    
+
     repeater.execute();
 
     // The command has been defined in the package.json file

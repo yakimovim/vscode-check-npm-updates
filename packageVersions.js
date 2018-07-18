@@ -1,14 +1,20 @@
 const semver = require('semver');
+const logger = require('./logger');
 
-function extractCurrentPackageVersions({ packageFileJson, packageLockFileJson }) {
+function extractCurrentPackageVersions({ packageFileJson, packageLockFileJson, configuration }) {
 
-    function collectRequiredPackages(dependencies, packages) {
+    function collectRequiredPackages(dependencies, packages, skip) {
         if (dependencies) {
             for (var packageName in dependencies) {
-                packages.push({
-                    packageName: packageName,
-                    requestedVersion: dependencies[packageName]
-                });
+                if(!skip.includes(packageName.toLowerCase())){
+                    packages.push({
+                        packageName: packageName,
+                        requestedVersion: dependencies[packageName]
+                    });
+                }
+                else {
+                    logger.logInfo(`Package '${packageName}' is skipped`)
+                }
             }
         }
     }
@@ -23,10 +29,13 @@ function extractCurrentPackageVersions({ packageFileJson, packageLockFileJson })
     }
 
     const packages = [];
-    collectRequiredPackages(packageFileJson.dependencies, packages);
-    collectRequiredPackages(packageFileJson.devDependencies, packages);
 
-    setInstalledVersions(packageLockFileJson.dependencies, packages);
+    if(!configuration.disabled) {
+        collectRequiredPackages(packageFileJson.dependencies, packages, configuration.skip);
+        collectRequiredPackages(packageFileJson.devDependencies, packages, configuration.skip);
+
+        setInstalledVersions(packageLockFileJson.dependencies, packages);
+    }
 
     return packages;
 }

@@ -15,55 +15,43 @@ const PackageVersionsRetriever = require("./package-versions-retriever").Availab
 
 logger.logInfo('Extension module is loaded');
 
-function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath) {
+async function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFilePath) {
     const folderPath = path.dirname(packageFilePath);
     const packageLockFilePath = path.join(folderPath, "package-lock.json");
     logger.logInfo(`Checking for available updates in ${packageFilePath}`);
 
-    return fileFunctions.readFileAsync(packageFilePath, { encoding: 'utf8' })
-        .then(packageFileContent => {
-            return JSON.parse(packageFileContent);
-        })
-        .then(packageFileJson => {
-            return fileFunctions.readFileAsync(packageLockFilePath, { encoding: 'utf8' })
-                .then(packageLockFileContent => {
-                    const packageLockFileJson = JSON.parse(packageLockFileContent);
-                    return {
-                        currentFolder: folderPath,
-                        packageFileJson: packageFileJson,
-                        packageLockFileJson: packageLockFileJson
-                    }
-                })
-        })
-        .then(data => {
-            return config.getConfiguration(folderPath)
-                .then(configuration => {
-                    data.configuration = configuration;
-                    return data;
-                })
-        })
-        .then(data => {
-            const packages = packageVersions.extractCurrentPackageVersions(data);
-            return {
-                currentFolder: data.currentFolder,
-                packages: packages
-            }
-        })
-        .then(data => {
-            const packages = data.packages;
-            return packageVersionsRetriever.collectAvailableVersions(packages)
-                .then(() => {
-                    return {
-                        currentFolder: data.currentFolder,
-                        packages: packages
-                    }
-                })
-        })
-        .then(data => {
-            const packagesToUpdate = packageVersions.getRequiredUpdates(data.packages);
-            notifications.displayNotification(data.currentFolder, packagesToUpdate);
-        })
-        .catch(err => { logger.logError(err); })
+    try {
+        const packageFileContent = await fileFunctions.readFileAsync(packageFilePath, { encoding: 'utf8' })
+
+        const packageFileJson = JSON.parse(packageFileContent)
+
+        const packageLockFileContent = await fileFunctions.readFileAsync(packageLockFilePath, { encoding: 'utf8' })
+
+        const packageLockFileJson = JSON.parse(packageLockFileContent);
+
+        const configuration = await config.getConfiguration(folderPath);
+
+        const projectData = {
+            currentFolder: folderPath,
+            packageFileJson: packageFileJson,
+            packageLockFileJson: packageLockFileJson,
+            configuration: configuration
+        }
+
+        const packages = packageVersions.extractCurrentPackageVersions(projectData);
+
+        const projectPackages = {
+            currentFolder: projectData.currentFolder,
+            packages: packages
+        }
+
+        await packageVersionsRetriever.collectAvailableVersions(projectPackages.packages)
+
+        const packagesToUpdate = packageVersions.getRequiredUpdates(projectPackages.packages);
+        notifications.displayNotification(projectPackages.currentFolder, packagesToUpdate);
+    } catch (error) {
+        logger.logError(error);
+    }
 }
 
 function checkNpmUpdatesForAllWorkspaces() {

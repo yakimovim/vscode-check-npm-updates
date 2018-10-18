@@ -4,7 +4,7 @@ Visual Studio Code extensions that check if all packages in `dependencies` and `
 
 ## Features
 
-The extension is activated every time you open a new workspace. It looks for `package.json` files in all subfolders of the folders of workspaces. But `node_modules` folders are excluded from the search. Also, you can run it at any moment using a keyboard shortcut.
+The extension is activated every time you open a new workspace. It looks for `package.json` files in all subfolders of the folders of workspaces. But `node_modules` and `bower_components` folders are excluded from the search. Also, you can run it at any moment using a keyboard shortcut.
 
 You can change number of simultaneously displayed notifications by adjusting `checkNpmUpdates.maximumNumberOfNotification` configuration setting. A negative value means that all notifications will be displayed.
 
@@ -39,6 +39,10 @@ The `.checkNpmUpdates.json` must contain JSON object with the following properti
 If you have found a bug or you want to suggest some improvements, create a pull request or an issue at [GitHub](https://github.com/yakimovim/vscode-check-npm-updates).
 
 ## Release Notes
+
+### 1.4.1
+
+Exclude `bower_components` folder from consideration.
 
 ### 1.4.0
 

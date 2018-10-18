@@ -49,7 +49,10 @@ async function findPackageFiles(rootFolder) {
 
     // exclude 'package.json' files in 'node_modules' folders.
     foundPackages = foundPackages.filter(packageFile => {
-      return packageFile.indexOf("node_modules") === -1;
+      return (
+        packageFile.indexOf("node_modules") === -1 &&
+        packageFile.indexOf("bower_components") === -1
+      );
     });
 
     // make full paths to 'package.json' files.

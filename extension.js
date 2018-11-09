@@ -47,7 +47,7 @@ async function checkNpmUpdatesInPackageFile(packageVersionsRetriever, packageFil
 
         await packageVersionsRetriever.collectAvailableVersions(projectPackages.packages)
 
-        const packagesToUpdate = packageVersions.getRequiredUpdates(projectPackages.packages);
+        const packagesToUpdate = packageVersions.getRequiredUpdates(projectPackages.packages, configuration);
         notifications.displayNotification(projectPackages.currentFolder, packagesToUpdate);
     } catch (error) {
         logger.logError(error);

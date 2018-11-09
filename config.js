@@ -4,7 +4,8 @@ const logger = require('./logger');
 
 const defaultConfiguration = {
     disable: false,
-    skip: []
+    skip: [],
+    skipPatchUpdates: []
 }
 
 function getConfiguration(folderPath) {
@@ -21,6 +22,11 @@ function getConfiguration(folderPath) {
                         let configuration = JSON.parse(data)
                         configuration = Object.assign({}, defaultConfiguration, configuration)
                         configuration.skip = configuration.skip.map(p => p.toLowerCase())
+
+                        if(Array.isArray(configuration.skipPatchUpdates)) {
+                            configuration.skipPatchUpdates = configuration.skipPatchUpdates.map(p => p.toLowerCase())
+                        }
+
                         resolve(configuration);
                     }
                     catch (exc) {

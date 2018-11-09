@@ -24,12 +24,16 @@ The `.checkNpmUpdates.json` must contain JSON object with the following properti
 
 * disable (optional). Boolean. The default value is `false`. Its value indicates if the check of package versions should be executed for the `package.json` or not.
 * skip (optional). An array of strings. The default value is an empty array. The array contains names of packages that should be excluded from the check. Names are case-insensitive.
+* skipPatchUpdates (optional). Either an array of strings or boolean. The default value is an empty array. The array contains names of packages that should be excluded from the check if only path part of their version was increased. Names are case-insensitive. You can set this property to `true` to exclude all packages if only path part of their version was increased.
 
 ```
 {
     "disable": false,
     "skip": [
         "typescript"
+    ],
+    "skipPatchUpdates": [
+        "lodash"
     ]
 }
 ```
@@ -39,6 +43,10 @@ The `.checkNpmUpdates.json` must contain JSON object with the following properti
 If you have found a bug or you want to suggest some improvements, create a pull request or an issue at [GitHub](https://github.com/yakimovim/vscode-check-npm-updates).
 
 ## Release Notes
+
+### 1.5.0
+
+Ability to exclude only updates in the patch part of a package version from the consideration.
 
 ### 1.4.1
 

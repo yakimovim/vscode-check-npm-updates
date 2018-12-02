@@ -44,6 +44,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.5.1
+
+Fix of security vulnerabilities in used NPM packages.
+
 ### 1.5.0
 
 Ability to exclude only updates in the patch part of a package version from the consideration.

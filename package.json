@@ -2,7 +2,8 @@
     "name": "check-npm-updates",
     "displayName": "Check Updates of NPM Packages",
     "description": "Checks if all required NPM packages are up to date",
-    "version": "1.5.1",
+    "version": "1.6.0",
+    "publisher": "iakimov",
     "engines": {
         "vscode": "^1.29.0"
     },

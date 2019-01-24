@@ -2,7 +2,7 @@
 
 Visual Studio Code extensions that check if all packages in `dependencies` and `devDependencies` sections of your `package.json` files are up to date. The extension makes this check in the background and shows notifications if updates are required. The check will be repeated after a predefined interval.
 
-Be aware, that the extension needs 'package-lock.json' or 'yarn.lock' files in the same folder as 'package.json' file. This is how the extension distinguish Npm and Yarn projects.
+Be aware, that the extension needs `package-lock.json` or `yarn.lock` files in the same folder as `package.json` file. This is how the extension distinguish Npm and Yarn projects.
 
 ## Features
 

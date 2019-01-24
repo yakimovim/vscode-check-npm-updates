@@ -1,9 +1,9 @@
-const fs = require("fs");
-const path = require("path");
-const glob = require("glob");
-const logger = require("./logger");
+import * as fs from "fs";
+import * as path from "path";
+import * as glob from "glob";
+import * as logger from "./logger";
 
-function readFileAsync(path, options) {
+export function readFileAsync(path: string, options: any): Promise<any> {
   return new Promise((resolve, reject) => {
     fs.readFile(path, options, (err, data) => {
       if (err) {
@@ -15,15 +15,16 @@ function readFileAsync(path, options) {
   });
 }
 
-exports.readFileAsync = readFileAsync;
-
-function findPackageFilesUsingGlob(rootFolder) {
+function findPackageFilesUsingGlob(rootFolder: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
     glob(
       "**/package.json",
       {
         cwd: rootFolder,
-        ignore: ["**/node_modules/**/package.json"]
+        ignore: [
+          "**/node_modules/**/package.json",
+          "**/bower_components/**/package.json"
+        ]
       },
       (err, files) => {
         if (err) {
@@ -37,12 +38,12 @@ function findPackageFilesUsingGlob(rootFolder) {
   });
 }
 
-async function findPackageFiles(rootFolder) {
+export async function findPackageFiles(rootFolder: string): Promise<string[]> {
   try {
     const arraysOfFiles = await findPackageFilesUsingGlob(rootFolder);
 
     // make flat list of 'package.json' files.
-    let foundPackages = [];
+    let foundPackages: string[] = [];
     arraysOfFiles.forEach(files => {
       foundPackages = foundPackages.concat(files);
     });
@@ -66,5 +67,3 @@ async function findPackageFiles(rootFolder) {
     return [];
   }
 }
-
-exports.findPackageFiles = findPackageFiles;

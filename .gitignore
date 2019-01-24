@@ -1,2 +1,7 @@
+out
 node_modules
-.vscode-test
+.vscode-test/
+.vscode/
+.vscodeignore
+*.vsix
+TestProjects/

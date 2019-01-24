@@ -1,11 +1,10 @@
 {
     "name": "check-npm-updates",
     "displayName": "Check Updates of NPM Packages",
-    "description": "Checks if all required npm packages are up to date",
+    "description": "Checks if all required NPM packages are up to date",
     "version": "1.5.1",
-    "publisher": "iakimov",
     "engines": {
-        "vscode": "^1.16.0"
+        "vscode": "^1.29.0"
     },
     "homepage": "https://github.com/yakimovim/vscode-check-npm-updates",
     "repository": {
@@ -25,7 +24,7 @@
     "activationEvents": [
         "workspaceContains:**/package.json"
     ],
-    "main": "./extension",
+    "main": "./out/extension",
     "contributes": {
         "commands": [
             {
@@ -48,11 +47,6 @@
                     "default": 10,
                     "description": "Maximum number of notifications to be displayed simultaneously. Use negative number to display all notifications."
                 },
-                "checkNpmUpdates.numberOfSimultaneousRequests": {
-                    "type": "integer",
-                    "default": 3,
-                    "description": "Number of simultaneous requests to NPM registry. This must be positive number. Be careful. If this number is too big, NPM registry may decline some requests."
-                },
                 "checkNpmUpdates.numberOfSecondsBeforeRepeat": {
                     "type": "integer",
                     "default": 14400,
@@ -63,18 +57,21 @@
     },
     "icon": "images/icon.png",
     "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
         "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "@types/glob": "^7.1.1",
-        "@types/mocha": "^5.2.5",
-        "@types/node": "^10.12.11",
-        "@types/semver": "^5.5.0",
-        "eslint": "^5.9.0",
+        "typescript": "^3.2.4",
+        "vscode": "^1.1.28",
+        "tslint": "^5.12.1",
         "mocha": "^5.2.0",
-        "typescript": "^3.2.1",
-        "vscode": "^1.1.22"
+        "@types/node": "^10.12.18",
+        "@types/mocha": "^5.2.5",
+        "@types/glob": "^7.1.1",
+        "@types/semver": "^5.5.0"
     },
     "dependencies": {
         "glob": "^7.1.3",

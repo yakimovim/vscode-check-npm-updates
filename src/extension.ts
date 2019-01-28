@@ -10,6 +10,7 @@ import { Repeater } from "./repeater";
 import { SingleExecution } from "./single-execution";
 import { OutdatedPackagesRetriever } from "./package-versions-retriever";
 import { createPackagesAnalyser } from "./packages-analysers";
+import { SequentialExecutor } from "./sequential-executor";
 
 logger.logInfo("Extension module is loaded");
 
@@ -42,7 +43,8 @@ async function checkPackageUpdatesInPackageFile(
 }
 
 function checkPackageUpdatesForAllWorkspaces(): Promise<any> {
-  const packageVersionsRetriever = new OutdatedPackagesRetriever();
+  const sequentialExecutor = new SequentialExecutor();
+  const packageVersionsRetriever = new OutdatedPackagesRetriever(sequentialExecutor);
   notifications.resetNumberOfDisplayedNotifications();
 
   if (!vscode.workspace.workspaceFolders) {

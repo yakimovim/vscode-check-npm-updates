@@ -44,6 +44,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.6.1
+
+Update documentation.
+
 ### 1.6.0
 
 Support of Yarn.

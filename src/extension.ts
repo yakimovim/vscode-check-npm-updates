@@ -11,17 +11,19 @@ import { SingleExecution } from "./single-execution";
 import { OutdatedPackagesRetriever } from "./package-versions-retriever";
 import { createPackagesAnalyser } from "./packages-analysers";
 import { SequentialExecutor } from "./sequential-executor";
+import { Auditor } from "./auditor";
 
 logger.logInfo("Extension module is loaded");
 
 async function checkPackageUpdatesInPackageFile(
   packageVersionsRetriever: OutdatedPackagesRetriever,
+  auditor: Auditor,
   packageFilePath: string
 ): Promise<void> {
   logger.logInfo(`Checking for available updates in ${packageFilePath}`);
 
   try {
-    var packageAnalyser = createPackagesAnalyser(packageVersionsRetriever, packageFilePath);
+    var packageAnalyser = createPackagesAnalyser(packageVersionsRetriever, auditor, packageFilePath);
     if(packageAnalyser === null) {
       return;
     }
@@ -45,6 +47,7 @@ async function checkPackageUpdatesInPackageFile(
 function checkPackageUpdatesForAllWorkspaces(): Promise<any> {
   const sequentialExecutor = new SequentialExecutor();
   const packageVersionsRetriever = new OutdatedPackagesRetriever(sequentialExecutor);
+  const auditor = new Auditor(sequentialExecutor);
   notifications.resetNumberOfDisplayedNotifications();
 
   if (!vscode.workspace.workspaceFolders) {
@@ -63,6 +66,7 @@ function checkPackageUpdatesForAllWorkspaces(): Promise<any> {
             files.map(packageFilePath => {
               return checkPackageUpdatesInPackageFile(
                 packageVersionsRetriever,
+                auditor,
                 packageFilePath
               );
             })

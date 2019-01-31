@@ -2,16 +2,26 @@ import * as fs from "fs";
 import * as path from "path";
 import * as logger from "./logger";
 
+export enum AllowedAutidLevels {
+  low,
+  moderate,
+  high
+}
+
 export interface IConfiguration {
   disable: boolean;
   skip: any[];
   skipPatchUpdates: any;
+  disableAudit: boolean;
+  lowestAuditLevel: AllowedAutidLevels;
 }
 
 const defaultConfiguration: IConfiguration = {
   disable: false,
   skip: [],
-  skipPatchUpdates: []
+  skipPatchUpdates: [],
+  disableAudit: false,
+  lowestAuditLevel: AllowedAutidLevels.low
 };
 
 export function getConfiguration(folderPath: string): Promise<IConfiguration> {

@@ -82,14 +82,16 @@ class NpmPackagesAnalyser extends PackagesAnalyser {
         return;
       }
 
-      const auditResult = await this.auditor.getAuditResult(
-        this.packageManager,
-        this.folderPath
-      );
+      if (!configuration.disableAudit) {
+        const auditResult = await this.auditor.getAuditResult(
+          this.packageManager,
+          this.folderPath
+        );
 
-      this._hasAuditProblems = hasAuditProblems(auditResult, configuration);
-      if(this._hasAuditProblems) {
-        return;
+        this._hasAuditProblems = hasAuditProblems(auditResult, configuration);
+        if (this._hasAuditProblems) {
+          return;
+        }
       }
 
       const outdatedPackages = await this.packageVersionsRetriever.getOutdatedPackages(
@@ -131,14 +133,16 @@ class YarnPackagesAnalyser extends PackagesAnalyser {
         return;
       }
 
-      const auditResult = await this.auditor.getAuditResult(
-        this.packageManager,
-        this.folderPath
-      );
+      if (!configuration.disableAudit) {
+        const auditResult = await this.auditor.getAuditResult(
+          this.packageManager,
+          this.folderPath
+        );
 
-      this._hasAuditProblems = hasAuditProblems(auditResult, configuration);
-      if(this._hasAuditProblems) {
-        return;
+        this._hasAuditProblems = hasAuditProblems(auditResult, configuration);
+        if (this._hasAuditProblems) {
+          return;
+        }
       }
 
       const outdatedPackages = await this.packageVersionsRetriever.getOutdatedPackages(

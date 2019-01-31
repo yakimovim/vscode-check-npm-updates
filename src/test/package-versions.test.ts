@@ -11,6 +11,7 @@ import * as assert from "assert";
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as packageVersions from "../package-versions";
+import { IConfiguration, AllowedAutidLevels } from "../config";
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Package Versions Tests", function() {
@@ -18,10 +19,12 @@ suite("Package Versions Tests", function() {
   test("Get Required Updates Of Outdated Packages. No packages", function() {
     const packages: packageVersions.IPackageVersion[] = [];
 
-    const configuration = {
+    const configuration: IConfiguration = {
       disable: false,
+      disableAudit: false,
       skip: [],
-      skipPatchUpdates: false
+      skipPatchUpdates: false,
+      lowestAuditLevel: AllowedAutidLevels.high
     };
 
     const packagesToUpdate = packageVersions.getRequiredUpdatesOfOutdatedPackages(
@@ -46,10 +49,12 @@ suite("Package Versions Tests", function() {
       }
     ];
 
-    const configuration = {
+    const configuration: IConfiguration = {
       disable: false,
+      disableAudit: false,
       skip: [ "lodash" ],
-      skipPatchUpdates: false
+      skipPatchUpdates: false,
+      lowestAuditLevel: AllowedAutidLevels.high
     };
 
     const packagesToUpdate = packageVersions.getRequiredUpdatesOfOutdatedPackages(
@@ -74,10 +79,12 @@ suite("Package Versions Tests", function() {
       }
     ];
 
-    const configuration = {
+    const configuration: IConfiguration = {
       disable: false,
+      disableAudit: false,
       skip: [],
-      skipPatchUpdates: true
+      skipPatchUpdates: true,
+      lowestAuditLevel: AllowedAutidLevels.high
     };
 
     const packagesToUpdate = packageVersions.getRequiredUpdatesOfOutdatedPackages(
@@ -102,10 +109,12 @@ suite("Package Versions Tests", function() {
       }
     ];
 
-    const configuration = {
+    const configuration: IConfiguration = {
       disable: false,
+      disableAudit: false,
       skip: [],
-      skipPatchUpdates: ["lodash"]
+      skipPatchUpdates: ["lodash"],
+      lowestAuditLevel: AllowedAutidLevels.high
     };
 
     const packagesToUpdate = packageVersions.getRequiredUpdatesOfOutdatedPackages(

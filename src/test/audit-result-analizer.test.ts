@@ -12,7 +12,7 @@ import * as assert from "assert";
 // as well as import your extension to test it
 import { hasAuditProblems } from "../audit-result-analizer";
 import { IAuditResult } from "../auditor";
-import { IConfiguration, AllowedAutidLevels } from "../config";
+import { IConfiguration, AllowedAutidLevels, getDefaultConfiguration } from "../config";
 
 suite("Audit Result Analisys Tests", function() {
   test("Critical problems", function() {
@@ -24,14 +24,9 @@ suite("Audit Result Analisys Tests", function() {
       info: 0
     };
 
-    const configuration: IConfiguration = {
-      disable: false,
-      disableAudit: false,
-      skip: [],
-      skipPatchUpdates: [],
-      lowestAuditLevel: AllowedAutidLevels.high
-    };
+    const configuration: IConfiguration = getDefaultConfiguration();
 
+    configuration.lowestAuditLevel = AllowedAutidLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
 
     configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
@@ -50,14 +45,9 @@ suite("Audit Result Analisys Tests", function() {
       info: 0
     };
 
-    const configuration: IConfiguration = {
-      disable: false,
-      disableAudit: false,
-      skip: [],
-      skipPatchUpdates: [],
-      lowestAuditLevel: AllowedAutidLevels.high
-    };
+    const configuration: IConfiguration = getDefaultConfiguration();
 
+    configuration.lowestAuditLevel = AllowedAutidLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
 
     configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
@@ -76,14 +66,9 @@ suite("Audit Result Analisys Tests", function() {
       info: 0
     };
 
-    const configuration: IConfiguration = {
-      disable: false,
-      disableAudit: false,
-      skip: [],
-      skipPatchUpdates: [],
-      lowestAuditLevel: AllowedAutidLevels.high
-    };
+    const configuration: IConfiguration = getDefaultConfiguration();
 
+    configuration.lowestAuditLevel = AllowedAutidLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
     configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
@@ -102,14 +87,9 @@ suite("Audit Result Analisys Tests", function() {
       info: 0
     };
 
-    const configuration: IConfiguration = {
-      disable: false,
-      disableAudit: false,
-      skip: [],
-      skipPatchUpdates: [],
-      lowestAuditLevel: AllowedAutidLevels.high
-    };
+    const configuration: IConfiguration = getDefaultConfiguration();
 
+    configuration.lowestAuditLevel = AllowedAutidLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
     configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
@@ -119,7 +99,7 @@ suite("Audit Result Analisys Tests", function() {
     assert.equal(hasAuditProblems(auditResult, configuration), true);
   });
 
-  test("Low problems", function() {
+  test("Info problems", function() {
     const auditResult: IAuditResult = {
       critical: 0,
       high: 0,
@@ -128,14 +108,9 @@ suite("Audit Result Analisys Tests", function() {
       info: 1
     };
 
-    const configuration: IConfiguration = {
-      disable: false,
-      disableAudit: false,
-      skip: [],
-      skipPatchUpdates: [],
-      lowestAuditLevel: AllowedAutidLevels.high
-    };
+    const configuration: IConfiguration = getDefaultConfiguration();
 
+    configuration.lowestAuditLevel = AllowedAutidLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
     configuration.lowestAuditLevel = AllowedAutidLevels.moderate;

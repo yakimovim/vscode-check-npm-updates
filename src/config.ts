@@ -24,6 +24,10 @@ const defaultConfiguration: IConfiguration = {
   lowestAuditLevel: AllowedAutidLevels.low
 };
 
+export function getDefaultConfiguration(): IConfiguration {
+  return Object.assign({}, defaultConfiguration);
+}
+
 export function getConfiguration(folderPath: string): Promise<IConfiguration> {
   const configFilePath = path.join(folderPath, ".checkNpmUpdates.json");
   return new Promise(resolve => {
@@ -38,20 +42,8 @@ export function getConfiguration(folderPath: string): Promise<IConfiguration> {
         } else {
           try {
             let configuration = JSON.parse(data);
-            configuration = Object.assign(
-              {},
-              defaultConfiguration,
-              configuration
-            );
-            configuration.skip = configuration.skip.map((p: string) =>
-              p.toLowerCase()
-            );
 
-            if (Array.isArray(configuration.skipPatchUpdates)) {
-              configuration.skipPatchUpdates = configuration.skipPatchUpdates.map(
-                (p: string) => p.toLowerCase()
-              );
-            }
+            configuration = mergeConfigurations(configuration);
 
             resolve(configuration);
           } catch (exc) {
@@ -67,4 +59,38 @@ export function getConfiguration(folderPath: string): Promise<IConfiguration> {
       resolve(defaultConfiguration);
     }
   });
+}
+
+export function mergeConfigurations(partialConfiguration: any): IConfiguration {
+  const defaultConfigurationInstance = getDefaultConfiguration();
+
+  try {
+    if (!!partialConfiguration.lowestAuditLevel) {
+      partialConfiguration.lowestAuditLevel =
+        AllowedAutidLevels[partialConfiguration.lowestAuditLevel.toLowerCase()];
+
+      if (partialConfiguration.lowestAuditLevel === undefined) {
+        partialConfiguration.lowestAuditLevel =
+          defaultConfigurationInstance.lowestAuditLevel;
+      }
+    }
+  } catch {
+    partialConfiguration.lowestAuditLevel =
+      defaultConfigurationInstance.lowestAuditLevel;
+  }
+
+  let configuration = Object.assign(
+    {},
+    defaultConfigurationInstance,
+    partialConfiguration
+  );
+  configuration.skip = configuration.skip.map((p: string) => p.toLowerCase());
+
+  if (Array.isArray(configuration.skipPatchUpdates)) {
+    configuration.skipPatchUpdates = configuration.skipPatchUpdates.map(
+      (p: string) => p.toLowerCase()
+    );
+  }
+
+  return configuration;
 }

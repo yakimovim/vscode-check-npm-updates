@@ -23,17 +23,30 @@ async function checkPackageUpdatesInPackageFile(
   logger.logInfo(`Checking for available updates in ${packageFilePath}`);
 
   try {
-    var packageAnalyser = createPackagesAnalyser(packageVersionsRetriever, auditor, packageFilePath);
-    if(packageAnalyser === null) {
+    var packageAnalyser = createPackagesAnalyser(
+      packageVersionsRetriever,
+      auditor,
+      packageFilePath
+    );
+    if (packageAnalyser === null) {
       return;
     }
 
     await packageAnalyser.initialize();
 
+    const hasAutidProblems = packageAnalyser.hasAuditProblems();
+    if (hasAutidProblems) {
+      notifications.displayAuditNotification(
+        packageAnalyser.packageManager,
+        packageAnalyser.folderPath
+      );
+      return;
+    }
+
     const packagesToUpdate = packageAnalyser.getPackagesToUpdate();
 
-    if(packagesToUpdate.length > 0) {
-      notifications.displayNotification(
+    if (packagesToUpdate.length > 0) {
+      notifications.displayUpdateNotification(
         packageAnalyser.packageManager,
         packageAnalyser.folderPath,
         packagesToUpdate
@@ -46,7 +59,9 @@ async function checkPackageUpdatesInPackageFile(
 
 function checkPackageUpdatesForAllWorkspaces(): Promise<any> {
   const sequentialExecutor = new SequentialExecutor();
-  const packageVersionsRetriever = new OutdatedPackagesRetriever(sequentialExecutor);
+  const packageVersionsRetriever = new OutdatedPackagesRetriever(
+    sequentialExecutor
+  );
   const auditor = new Auditor(sequentialExecutor);
   notifications.resetNumberOfDisplayedNotifications();
 
@@ -82,36 +97,42 @@ function checkPackageUpdatesForAllWorkspaces(): Promise<any> {
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  const singleExecution = new SingleExecution(
+    () => {
+      return checkPackageUpdatesForAllWorkspaces();
+    },
+    () => {
+      vscode.window.showInformationMessage(
+        "Check for updates of packages is already executing. Please wait."
+      );
+    }
+  );
 
-    const singleExecution = new SingleExecution(
-        () => {
-            return checkPackageUpdatesForAllWorkspaces();
-        },
-        () => {
-            vscode.window.showInformationMessage('Check for updates of packages is already executing. Please wait.');
-        }
-    );
+  const repeater = new Repeater(
+    () => {
+      return singleExecution.execute();
+    },
+    () => {
+      return vscode.workspace.getConfiguration("checkNpmUpdates")[
+        "numberOfSecondsBeforeRepeat"
+      ];
+    }
+  );
+  context.subscriptions.push(repeater);
 
-    const repeater = new Repeater(
-        () => {
-            return singleExecution.execute();
-        },
-        () => {
-            return vscode.workspace.getConfiguration("checkNpmUpdates")["numberOfSecondsBeforeRepeat"];
-        }
-    );
-    context.subscriptions.push(repeater);
+  repeater.execute();
 
-    repeater.execute();
+  // The command has been defined in the package.json file
+  // Now provide the implementation of the command with  registerCommand
+  // The commandId parameter must match the command field in package.json
+  const disposable = vscode.commands.registerCommand(
+    "checkNpmUpdates.checkUpdates",
+    function() {
+      repeater.execute();
+    }
+  );
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    const disposable = vscode.commands.registerCommand('checkNpmUpdates.checkUpdates', function () {
-        repeater.execute();
-    });
-
-    context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated

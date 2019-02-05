@@ -1,6 +1,6 @@
 # Check Updates of NPM Packages
 
-Visual Studio Code extensions that check if all packages in `dependencies` and `devDependencies` sections of your `package.json` files are up to date. The extension makes this check in the background and shows notifications if updates are required. The check will be repeated after a predefined interval.
+Visual Studio Code extensions that check if all packages in `dependencies` and `devDependencies` sections of your `package.json` files are up to date. Also the extension checks if there are any audit problems with used packages. The extension makes these checks in the background and shows notifications if updates are required or there are audit problems. The check will be repeated after a predefined interval.
 
 Be aware, that the extension needs `package-lock.json` or `yarn.lock` files in the same folder as `package.json` file. This is how the extension distinguish Npm and Yarn projects.
 
@@ -22,9 +22,11 @@ You may place a file with name `.checkNpmUpdates.json` into a folder where `pack
 
 The `.checkNpmUpdates.json` must contain JSON object with the following properties:
 
-* disable (optional). Boolean. The default value is `false`. Its value indicates if the check of package versions should be executed for the `package.json` or not.
-* skip (optional). An array of strings. The default value is an empty array. The array contains names of packages that should be excluded from the check. Names are case-insensitive.
-* skipPatchUpdates (optional). Either an array of strings or boolean. The default value is an empty array. The array contains names of packages that should be excluded from the check if only patch part of their version was increased. Names are case-insensitive. You can set this property to `true` to exclude all packages if only patch part of their version was increased.
+* **disable** (optional). Boolean. The default value is `false`. Its value indicates if the check of package versions should be executed for the `package.json` or not.
+* **skip** (optional). An array of strings. The default value is an empty array. The array contains names of packages that should be excluded from the check. Names are case-insensitive.
+* **skipPatchUpdates** (optional). Either an array of strings or boolean. The default value is an empty array. The array contains names of packages that should be excluded from the check if only patch part of their version was increased. Names are case-insensitive. You can set this property to `true` to exclude all packages if only patch part of their version was increased.
+* **disableAudit** (optional). Boolean. The default value is `false`. This value indicates if audit of packages should be done for the `package.json` or not.
+* **lowestAuditLevel** (optional). String. Default value is "low". This property can have one of the following values: *low*, *moderate*, *high*. It sets lowest possible level of audit problems, about which the extension will show notification. So, if you set this property to *moderate*, you'll get notification about audit problems of moderate, high and critical level, but will not have notifications about problems of low level.
 
 ```
 {
@@ -34,7 +36,8 @@ The `.checkNpmUpdates.json` must contain JSON object with the following properti
     ],
     "skipPatchUpdates": [
         "lodash"
-    ]
+    ],
+    "lowestAuditLevel": "moderate"
 }
 ```
 
@@ -43,6 +46,10 @@ The `.checkNpmUpdates.json` must contain JSON object with the following properti
 If you have found a bug or you want to suggest some improvements, create a pull request or an issue at [GitHub](https://github.com/yakimovim/vscode-check-npm-updates).
 
 ## Release Notes
+
+### 1.7.0
+
+Support of audit analysis.
 
 ### 1.6.1
 

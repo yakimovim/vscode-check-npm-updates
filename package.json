@@ -2,7 +2,7 @@
     "name": "check-npm-updates",
     "displayName": "Check Updates of NPM Packages",
     "description": "Checks if all required NPM packages are up to date",
-    "version": "1.6.1",
+    "version": "1.7.0",
     "publisher": "iakimov",
     "engines": {
         "vscode": "^1.29.0"
@@ -65,11 +65,11 @@
         "test": "npm run compile && node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^3.2.4",
+        "typescript": "^3.3.1",
         "vscode": "^1.1.28",
         "tslint": "^5.12.1",
         "mocha": "^5.2.0",
-        "@types/node": "^10.12.18",
+        "@types/node": "^10.12.21",
         "@types/mocha": "^5.2.5",
         "@types/glob": "^7.1.1",
         "@types/semver": "^5.5.0"

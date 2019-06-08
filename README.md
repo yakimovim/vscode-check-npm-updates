@@ -47,6 +47,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.7.2
+
+Fix of security vulnerabilities in used NPM packages.
+
 ### 1.7.1
 
 Fix of security vulnerabilities in used NPM packages.

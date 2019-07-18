@@ -47,6 +47,10 @@ If you have found a bug or you want to suggest some improvements, create a pull 
 
 ## Release Notes
 
+### 1.7.4
+
+Reduce size of the package.
+
 ### 1.7.3
 
 Fix of security vulnerabilities in used NPM packages.

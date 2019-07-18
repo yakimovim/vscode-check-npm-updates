@@ -1,0 +1,11 @@
+.vscode/
+TestProjects/
+vsc-extension-quickstart.md
+src/
+out/test/
+out/**/*.map
+tsconfig.json
+tslint.json
+CHANGELOG.md
+.whitesource
+.gitignore

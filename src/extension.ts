@@ -34,8 +34,8 @@ async function checkPackageUpdatesInPackageFile(
 
     await packageAnalyser.initialize();
 
-    const hasAutidProblems = packageAnalyser.hasAuditProblems();
-    if (hasAutidProblems) {
+    const hasAuditProblems = packageAnalyser.hasAuditProblems();
+    if (hasAuditProblems) {
       notifications.displayAuditNotification(
         packageAnalyser.packageManager,
         packageAnalyser.folderPath

@@ -66,16 +66,17 @@
     },
     "devDependencies": {
         "@types/glob": "^7.1.3",
-        "@types/mocha": "^8.0.1",
-        "@types/node": "^14.0.27",
-        "@types/semver": "^7.3.1",
-        "mocha": "^8.1.0",
+        "@types/mocha": "^8.2.2",
+        "@types/node": "^14.14.37",
+        "@types/semver": "^7.3.4",
+        "@types/vscode": "^1.55.0",
+        "mocha": "^8.3.2",
         "tslint": "^6.1.3",
-        "typescript": "^3.9.7",
+        "typescript": "^4.2.4",
         "vscode": "^1.1.37"
     },
     "dependencies": {
         "glob": "^7.1.6",
-        "semver": "^7.3.2"
+        "semver": "^7.3.5"
     }
 }

@@ -18,9 +18,9 @@ export class OutdatedPackagesRetriever {
 
     return this._sequentialExecutor.executeRequest<IPackageVersion[]>(
       (deferred) => {
-        if (packageManager === PackageManager.Npm) {
+        if (packageManager === PackageManager.npm) {
           this._getOutdatedNpmPackages(folder, deferred);
-        } else if (packageManager === PackageManager.Yarn) {
+        } else if (packageManager === PackageManager.yarn) {
           this._getOutdatedYarnPackages(folder, deferred);
         } else {
           deferred.resolve([]);

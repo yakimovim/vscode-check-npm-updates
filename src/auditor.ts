@@ -32,9 +32,9 @@ export class Auditor {
     folder: string
   ): Promise<IAuditResult> {
     return this._sequentialExecutor.executeRequest<IAuditResult>(deferred => {
-      if (packageManager === PackageManager.Npm) {
+      if (packageManager === PackageManager.npm) {
         this._getNpmAuditResult(folder, deferred);
-      } else if (packageManager === PackageManager.Yarn) {
+      } else if (packageManager === PackageManager.yarn) {
         this._getYarnAuditResult(folder, deferred);
       } else {
         deferred.resolve(noAuditProblems);

@@ -10,11 +10,11 @@ import * as assert from "assert";
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
-import { hasAuditProblems } from "../audit-result-analizer";
-import { IAuditResult } from "../auditor";
-import { IConfiguration, AllowedAutidLevels, getDefaultConfiguration } from "../config";
+import { hasAuditProblems } from "../../audit-result-analyzer";
+import { IAuditResult } from "../../auditor";
+import { IConfiguration, AllowedAuditLevels, getDefaultConfiguration } from "../../config";
 
-suite("Audit Result Analisys Tests", function() {
+suite("Audit Result Analysis Tests", function() {
   test("Critical problems", function() {
     const auditResult: IAuditResult = {
       critical: 1,
@@ -26,13 +26,13 @@ suite("Audit Result Analisys Tests", function() {
 
     const configuration: IConfiguration = getDefaultConfiguration();
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.high;
+    configuration.lowestAuditLevel = AllowedAuditLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
+    configuration.lowestAuditLevel = AllowedAuditLevels.moderate;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.low;
+    configuration.lowestAuditLevel = AllowedAuditLevels.low;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
   });
 
@@ -47,13 +47,13 @@ suite("Audit Result Analisys Tests", function() {
 
     const configuration: IConfiguration = getDefaultConfiguration();
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.high;
+    configuration.lowestAuditLevel = AllowedAuditLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
+    configuration.lowestAuditLevel = AllowedAuditLevels.moderate;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.low;
+    configuration.lowestAuditLevel = AllowedAuditLevels.low;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
   });
 
@@ -68,13 +68,13 @@ suite("Audit Result Analisys Tests", function() {
 
     const configuration: IConfiguration = getDefaultConfiguration();
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.high;
+    configuration.lowestAuditLevel = AllowedAuditLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
+    configuration.lowestAuditLevel = AllowedAuditLevels.moderate;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.low;
+    configuration.lowestAuditLevel = AllowedAuditLevels.low;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
   });
 
@@ -89,13 +89,13 @@ suite("Audit Result Analisys Tests", function() {
 
     const configuration: IConfiguration = getDefaultConfiguration();
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.high;
+    configuration.lowestAuditLevel = AllowedAuditLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
+    configuration.lowestAuditLevel = AllowedAuditLevels.moderate;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.low;
+    configuration.lowestAuditLevel = AllowedAuditLevels.low;
     assert.equal(hasAuditProblems(auditResult, configuration), true);
   });
 
@@ -110,13 +110,13 @@ suite("Audit Result Analisys Tests", function() {
 
     const configuration: IConfiguration = getDefaultConfiguration();
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.high;
+    configuration.lowestAuditLevel = AllowedAuditLevels.high;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.moderate;
+    configuration.lowestAuditLevel = AllowedAuditLevels.moderate;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
 
-    configuration.lowestAuditLevel = AllowedAutidLevels.low;
+    configuration.lowestAuditLevel = AllowedAuditLevels.low;
     assert.equal(hasAuditProblems(auditResult, configuration), false);
   });
 });

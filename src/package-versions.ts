@@ -2,8 +2,8 @@ import * as semver from "semver";
 import { IConfiguration } from "./config";
 
 export enum PackageManager {
-  Npm,
-  Yarn
+  npm,
+  yarn
 }
 
 export interface IPackageInfo {

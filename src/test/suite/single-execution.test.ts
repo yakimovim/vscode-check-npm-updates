@@ -10,8 +10,8 @@ import * as assert from "assert";
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
-import { SingleExecution } from "../single-execution";
-import { Deferred } from "../deferred";
+import { SingleExecution } from "../../single-execution";
+import { Deferred } from "../../deferred";
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("Single Execution Tests", function() {
@@ -47,14 +47,14 @@ suite("Single Execution Tests", function() {
         return deferred.getPromise();
       },
       () => {
-        assert.fail(0, 1, "There should be no another execution");
+        assert.fail("There should be no another execution");
       }
     );
 
     singleExecution
       .execute()
       .then(() => {
-        assert.fail(0, 1, "Execution should fail.");
+        assert.fail("Execution should fail.");
       })
       .catch(err => {
         assert.equal(err, 123, "Incorrect resolved data.");
@@ -70,7 +70,7 @@ suite("Single Execution Tests", function() {
         return Promise.resolve(123);
       },
       () => {
-        assert.fail(0, 1, "There should be no another execution");
+        assert.fail("There should be no another execution");
       }
     );
 
@@ -84,7 +84,7 @@ suite("Single Execution Tests", function() {
         done();
       })
       .catch(() => {
-        assert.fail(0, 1, "Execution should not fail.");
+        assert.fail("Execution should not fail.");
       });
   });
 
@@ -101,7 +101,7 @@ suite("Single Execution Tests", function() {
         }
       },
       () => {
-        assert.fail(0, 1, "There should be no another execution");
+        assert.fail("There should be no another execution");
       }
     );
 
@@ -116,7 +116,7 @@ suite("Single Execution Tests", function() {
         done();
       })
       .catch(() => {
-        assert.fail(0, 1, "Execution should not fail.");
+        assert.fail("Execution should not fail.");
       });
   });
 
@@ -152,7 +152,7 @@ suite("Single Execution Tests", function() {
         done();
       })
       .catch(() => {
-        assert.fail(0, 1, "Execution should not fail.");
+        assert.fail("Execution should not fail.");
       });
 
     singleExecution.execute();

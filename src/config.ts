@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as logger from "./logger";
 
-export enum AllowedAutidLevels {
+export enum AllowedAuditLevels {
   low,
   moderate,
   high
@@ -13,7 +13,7 @@ export interface IConfiguration {
   skip: any[];
   skipPatchUpdates: any;
   disableAudit: boolean;
-  lowestAuditLevel: AllowedAutidLevels;
+  lowestAuditLevel: AllowedAuditLevels;
 }
 
 const defaultConfiguration: IConfiguration = {
@@ -21,7 +21,7 @@ const defaultConfiguration: IConfiguration = {
   skip: [],
   skipPatchUpdates: [],
   disableAudit: false,
-  lowestAuditLevel: AllowedAutidLevels.low
+  lowestAuditLevel: AllowedAuditLevels.low
 };
 
 export function getDefaultConfiguration(): IConfiguration {
@@ -67,7 +67,7 @@ export function mergeConfigurations(partialConfiguration: any): IConfiguration {
   try {
     if (!!partialConfiguration.lowestAuditLevel) {
       partialConfiguration.lowestAuditLevel =
-        AllowedAutidLevels[partialConfiguration.lowestAuditLevel.toLowerCase()];
+        AllowedAuditLevels[partialConfiguration.lowestAuditLevel.toLowerCase()];
 
       if (partialConfiguration.lowestAuditLevel === undefined) {
         partialConfiguration.lowestAuditLevel =

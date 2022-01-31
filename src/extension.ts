@@ -9,7 +9,7 @@ import * as logger from "./logger";
 import { Repeater } from "./repeater";
 import { SingleExecution } from "./single-execution";
 import { OutdatedPackagesRetriever } from "./package-versions-retriever";
-import { createPackagesAnalyser } from "./packages-analysers";
+import { createPackagesAnalyser } from "./packages-analyzers";
 import { SequentialExecutor } from "./sequential-executor";
 import { Auditor } from "./auditor";
 

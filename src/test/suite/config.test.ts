@@ -12,9 +12,9 @@ import * as assert from "assert";
 // as well as import your extension to test it
 import {
   IConfiguration,
-  AllowedAutidLevels,
+  AllowedAuditLevels,
   mergeConfigurations
-} from "../config";
+} from "../../config";
 
 suite("Configuration Tests", function() {
   test("Low audit level", function() {
@@ -26,7 +26,7 @@ suite("Configuration Tests", function() {
       partialConfiguration
     );
 
-    assert.equal(configuration.lowestAuditLevel, AllowedAutidLevels.low);
+    assert.equal(configuration.lowestAuditLevel, AllowedAuditLevels.low);
   });
 
   test("Moderate audit level", function() {
@@ -38,7 +38,7 @@ suite("Configuration Tests", function() {
       partialConfiguration
     );
 
-    assert.equal(configuration.lowestAuditLevel, AllowedAutidLevels.moderate);
+    assert.equal(configuration.lowestAuditLevel, AllowedAuditLevels.moderate);
   });
 
   test("High audit level", function() {
@@ -50,7 +50,7 @@ suite("Configuration Tests", function() {
       partialConfiguration
     );
 
-    assert.equal(configuration.lowestAuditLevel, AllowedAutidLevels.high);
+    assert.equal(configuration.lowestAuditLevel, AllowedAuditLevels.high);
   });
 
   test("Unknown audit level", function() {
@@ -62,7 +62,7 @@ suite("Configuration Tests", function() {
       partialConfiguration
     );
 
-    assert.equal(configuration.lowestAuditLevel, AllowedAutidLevels.low);
+    assert.equal(configuration.lowestAuditLevel, AllowedAuditLevels.low);
   });
 
   test("Lowercase packages to skip", function() {

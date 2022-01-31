@@ -6,7 +6,7 @@ import * as logger from "./logger";
 import * as packageVersions from "./package-versions";
 import { OutdatedPackagesRetriever } from "./package-versions-retriever";
 import { Auditor } from "./auditor";
-import { hasAuditProblems } from "./audit-result-analizer";
+import { hasAuditProblems } from "./audit-result-analyzer";
 
 export function createPackagesAnalyser(
   packageVersionsRetriever: OutdatedPackagesRetriever,
@@ -47,7 +47,7 @@ export abstract class PackagesAnalyser {
     this.packageManager = packageManager;
   }
 
-  public abstract async initialize(): Promise<void>;
+  public abstract initialize(): Promise<void>;
 
   public hasAuditProblems(): boolean {
     return this._hasAuditProblems;
@@ -65,7 +65,7 @@ class NpmPackagesAnalyser extends PackagesAnalyser {
     folderPath: string
   ) {
     super(
-      packageVersions.PackageManager.Npm,
+      packageVersions.PackageManager.npm,
       packageVersionsRetriever,
       auditor,
       folderPath
@@ -116,7 +116,7 @@ class YarnPackagesAnalyser extends PackagesAnalyser {
     folderPath: string
   ) {
     super(
-      packageVersions.PackageManager.Yarn,
+      packageVersions.PackageManager.yarn,
       packageVersionsRetriever,
       auditor,
       folderPath

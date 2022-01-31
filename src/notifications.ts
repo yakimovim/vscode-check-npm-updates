@@ -57,7 +57,7 @@ export function displayUpdateNotification(
 }
 
 function getUpdateCommand(packageManager: PackageManager): string {
-  if (packageManager === PackageManager.Yarn) {
+  if (packageManager === PackageManager.yarn) {
     return "yarn upgrade";
   }
 
@@ -88,7 +88,7 @@ export function displayAuditNotification(
 }
 
 function getAuditCommand(packageManager: PackageManager): string {
-  if (packageManager === PackageManager.Yarn) {
+  if (packageManager === PackageManager.yarn) {
     return "yarn audit";
   }
 
